@@ -40,7 +40,7 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
-          git add seen_links.json zameen_rentals_federalbarea.csv || true
+          git add seen_links.json || true
 
           # Commit only if there are changes
           if git diff --cached --quiet; then
