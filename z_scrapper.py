@@ -425,6 +425,10 @@ if __name__ == "__main__":
             smtp_password=os.environ["SMTP_PASS"],
         )
         print("Email sent.")
+            # Flag for GitHub Actions: upload CSV artifact only when new listings exist
+        with open("new_listings.flag", "w", encoding="utf-8") as f:
+            f.write(str(len(rows_to_email)))
+
     else:
         print("No new listings. No email sent.")
 

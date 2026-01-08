@@ -1,8 +1,12 @@
-name: Zameen Rentals Scraper
+name: Zameen Rental Scraper
 
 on:
   schedule:
-    - cron: "0 6,11,15 * * *"   # 11am, 4pm, 8pm Pakistan (UTC+5)
+    # Pakistan Time (UTC+5)
+    # 11:00 PKT → 06:00 UTC
+    # 16:00 PKT → 11:00 UTC
+    # 20:00 PKT → 15:00 UTC
+    - cron: "0 6,11,15 * * *"
   workflow_dispatch:
 
 jobs:
@@ -35,17 +39,29 @@ jobs:
         run: |
           python z_scrapper.py
 
-      - name: Commit updated state (seen_links.json + csv)
+      - name: Upload CSV artifact (only if new listings)
+        if: ${{ hashFiles('new_listings.flag') != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: new_listings_csv
+          path: zameen_rentals_federalbarea.csv
+          retention-days: 7
+
+      - name: Commit updated state (seen_links.json only)
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
 
           git add seen_links.json || true
 
-          # Commit only if there are changes
           if git diff --cached --quiet; then
-            echo "No state changes to commit."
+            echo "No changes to commit."
           else
-            git commit -m "Update seen links and latest scrape output"
+            git commit -m "Update seen links"
             git push
           fi
+
+      - name: Cleanup flag
+        if: always()
+        run: |
+          rm -f new_listings.flag
