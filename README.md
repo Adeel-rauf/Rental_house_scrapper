@@ -1,11 +1,45 @@
-Python Automation Project — Rental Property Tracker
+Rental House Scraper & Alert System
 
-Built an automated web scraping system using Python, Playwright, and BeautifulSoup to monitor rental property listings on a real estate platform.
+A Python automation that monitors rental listings on Zameen, detects new properties, and sends email alerts — fully automated using GitHub Actions.
 
-Implemented deduplication logic to detect and notify only newly added listings.
+Features
 
-Integrated email alerts and generated structured CSV reports for new data.
+Dynamic scraping with Playwright
 
-Deployed with GitHub Actions to run on a fixed daily schedule (3× per day) with artifact management.
+Extracts price, beds, baths, area, full address (with block), and link
 
-Designed a lightweight state-tracking mechanism to persist results across runs.
+Alerts only for new listings (no duplicates)
+
+Email notifications via SMTP
+
+CSV report uploaded as GitHub Actions artifact
+
+Runs 3× daily on schedule
+
+How It Works
+
+Scrapes rental listings for a configured location and price range
+
+Compares results with previously seen listings
+
+Sends email + uploads CSV only if new listings are found
+
+Persists state across runs using a JSON file
+
+Schedule
+
+Runs automatically at:
+
+11:00 AM, 4:00 PM, 8:00 PM (Pakistan Time)
+
+Project Structure
+Rental_house_scrapper/
+├── z_scrapper.py
+├── notifier.py
+├── requirements.txt
+├── seen_links.json
+└── .github/workflows/scrape.yml
+
+Tech Stack
+
+Python · Playwright · BeautifulSoup · GitHub Actions · SMTP · CSV
